@@ -1,0 +1,30 @@
+using System;
+
+namespace zadG
+{
+    class Program
+    {
+
+        static int Hamming(string prvi,string drugi)
+        {
+            int udaljenost=0;
+            if (prvi.Length != drugi.Length) return 100; //greska
+
+            for(int i=0;i<prvi.Length;i++)
+            {
+                if (prvi[i] != drugi[i]) udaljenost++;
+            }
+            return udaljenost;
+        }
+
+        static void Main(string[] args)
+        {
+
+            string substr = "ATGATCAAC";
+            string substr2 = "ATGATCAAG";
+            int Hamm = Hamming(substr, substr2);
+
+            Console.WriteLine("REZ = {0}",Hamm);
+        }
+    }
+}
