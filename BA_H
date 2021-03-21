@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+namespace zadH
+{
+    class Program
+    {
+
+        static int Hamming(string prvi, string drugi)
+        {
+            int udaljenost = 0;
+            if (prvi.Length != drugi.Length) return 100; //greska
+
+            for (int i = 0; i < prvi.Length; i++)
+            {
+                if (prvi[i] != drugi[i]) udaljenost++;
+            }
+            return udaljenost;
+        }
+
+        static string[] kejmers(string text, int k)
+        {
+            string[] kmeri = new string[text.Length - k + 1];
+            int l = 0;
+            for (int i = 0; i < text.Length - k + 1; i++)
+            {
+                string komad = "";
+                int z = i;
+                for (int j = 0; j < k; j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+
+
+            return kmeri;
+
+        }
+
+        static List<int> positions(string text,string pattern,int d)
+        {
+            List<int> pozicije = new List<int>();
+            int k = pattern.Length;
+            int len = text.Length - k + 1;
+            string[] kejmeri = new string[len];
+            kejmeri = kejmers(text, pattern.Length);
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                Console.WriteLine("KEJMER : {0}", kejmeri[i]);
+            }
+
+
+
+            for(int i=0;i<kejmeri.Length-1;i++)
+            {
+                
+               if(Hamming(kejmeri[i],pattern)<=d)
+               {
+                    pozicije.Add(i);
+               }
+                
+            }
+
+
+            return pozicije;
+        }
+
+        static void Main(string[] args)
+        {
+
+            string text= "atcaATGATCAACgtaagcttctaagcATGATCAAGgtgctcacacagtttatccacaacctgagtggatgacatcaagataggtcgttgtatctccttcctctcgtactctcatgacca"
+                          +"cggaaagATGATCAAGagaggatgatttcttggccatatcgcaatgaatacttgtgacttgtgcttccaattgacatcttcagcgccatattgcgctggccaaggtgacggagcgggatt"
+                          +"acgaaagCATGATCATggctgttgttctgtttatcttgttttgactgagacttgttaggatagacggtttttcatcactgactagccaaagccttactctgcctgacatcgaccgtaaat"
+                          +"tgataatgaatttacatgcttccgcgacgatttacctCTTGATCATcgatccgattgaagatcttcaattgttaattctcttgcctcgactcatagccatgatgagctCTTGATCATgtt"
+                          +"tccttaaccctctattttttacggaagaATGATCAAGctgctgctCTTGATCATcgtttc";
+            Console.WriteLine("duljina texta : {0}", text.Length);
+            string text2 = text.ToUpper();
+            string pattern = "ATGATCAAG";
+            int d = 1;
+            List<int> pozicije = positions(text2, pattern, d);
+            foreach(int el in pozicije)
+            {
+                Console.WriteLine("pozicija : {0}", el);
+            }
+           
+        }
+    }
+}
