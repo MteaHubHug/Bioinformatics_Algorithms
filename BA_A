@@ -1,0 +1,43 @@
+using System;
+
+namespace z1
+{
+    class Program
+    {
+
+        static int PatternCount(string text,string pattern)
+        {
+            int cnt = 0;
+
+            
+            for(int i=0;i<text.Length;i++)
+            {
+                int j = 0;
+                
+                if(pattern[0]==text[i])
+                {
+                    int k = i;
+                 
+                    while ( pattern[j]==text[k])
+                    {
+                        
+                        j++;
+                        k++;
+                        if (j == pattern.Length || k == text.Length) break;
+                    }
+                    if (j == pattern.Length) cnt++;
+                }
+
+            }
+            return cnt;
+        }
+
+
+        static void Main(string[] args)
+        {
+            //int rez = PatternCount("ACTGCCTA", "CT");
+            int rez = PatternCount("ACTATATGCCTAT", "TAT");
+            Console.WriteLine("rez : {0}",rez);
+        }
+    }
+}
