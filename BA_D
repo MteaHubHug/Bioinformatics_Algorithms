@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+namespace zadD
+{
+    class Program
+    {
+
+        static List<int> PatternMatching(string genom,string pattern)
+        {
+            List<int> indeksi = new List<int>();
+
+            for(int i=0;i<genom.Length-pattern.Length+1;i++)
+            {
+                int j = 0;
+                int k = i;
+                if(pattern[0]==genom[i])
+                {
+                    while(pattern[j]==genom[k])
+                    {
+                        j++;
+                        k++;
+                        if (j == pattern.Length || k == genom.Length) break;
+                    }
+                    if(j==pattern.Length)
+                    {
+                        indeksi.Add(i);
+                    }
+                }
+            }
+
+
+            return indeksi;
+        }
+
+        static void Main(string[] args)
+        {
+
+            string gnm = "ATGATCAAG";
+            string genom = gnm.ToUpper();
+            string pattern = "AT";
+            List<int> indeksi = PatternMatching(genom, pattern);
+            foreach (int el in indeksi)
+            {
+                Console.WriteLine("idx : {0}", el);
+            }
+    
+        }
+    }
+}
