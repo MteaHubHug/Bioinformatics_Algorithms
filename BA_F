@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+/*
+ SKEWi(Genome) as the difference between the total number
+of occurrences of G and the total number of occurrences of C
+ */
+
+namespace zadF
+{
+    class Program
+    {
+
+
+
+        static int Gs(string genom)
+        {
+            int cnt = 0;
+            for (int i = 0; i < genom.Length; i++)
+            {
+                if (genom[i] == 'G') cnt++;
+            }
+            return cnt;
+        }
+
+        static int Cs(string genom)
+        {
+            int cnt = 0;
+            for (int i = 0; i < genom.Length; i++)
+            {
+                if (genom[i] == 'C') cnt++;
+            }
+            return cnt;
+        }
+
+        static int skew(string genom)
+        {
+            int cntG = Gs(genom);
+            int cntC = Cs(genom);
+            int diff = cntG - cntC;
+            return diff;
+        }
+
+        static int[] tocke(string genom)
+        {
+            int[] razlike = new int[genom.Length];
+            string komad = "";
+            for (int i = 0; i < genom.Length; i++)
+            {
+                komad += genom[i];
+                razlike[i] = skew(komad);
+            }
+
+            for(int i=0;i<razlike.Length;i++)
+            {
+                Console.WriteLine("pozicija : {0} ::: razlika G-C : {1}", i, razlike[i]);
+            }
+
+
+            return razlike;
+
+        }
+
+        static List<int> mins (string genom)
+        {
+            List<int> positions = new List<int>();
+            int[] razlike = tocke(genom);
+            int min = razlike[0];
+            for(int i=0;i<razlike.Length;i++)
+            {
+                if (min > razlike[i]) min = razlike[i];
+            }
+            
+            for (int i = 0; i < razlike.Length; i++)
+            {
+                if(min==razlike[i])
+                {
+                    positions.Add(i);
+                }
+            }
+            return positions;
+        }
+
+
+        static void Main(string[] args)
+        {
+
+            string genom = "CATGGGCATCGGCCATACGCC";
+            List<int> positions = mins(genom);
+            foreach (int el in positions)
+            {
+                Console.WriteLine("minimum Skew dijagrama je u tocki : {0}",el);
+            }
+
+           
+        }
+    }
+}
