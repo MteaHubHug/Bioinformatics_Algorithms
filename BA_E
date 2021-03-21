@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+namespace zadE
+{
+    class Program
+    {
+
+
+
+
+        static string[] kejmers(string text, int k)
+        {
+            string[] kmeri = new string[text.Length - k + 1];
+            int l = 0;
+            for (int i = 0; i < text.Length - k + 1; i++)
+            {
+                string komad = "";
+                int z = i;
+                for (int j = 0; j < k; j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+
+
+            return kmeri;
+        }
+
+
+        static List<string> clums(string genom,int k,int L,int t)
+        {
+            List<string> klamz= new List<string>();
+
+            string[] kmeri = new string[genom.Length - k + 1];
+            kmeri = kejmers(genom, k);
+            for (int i = 0; i < genom.Length - k + 1; i++)
+            {
+                Console.WriteLine("kmer : {0}", kmeri[i]);
+            }
+
+            int[] cnts = new int[genom.Length - k + 1];
+            
+            for (int i = 0; i < cnts.Length; i++) cnts[i] = 1;
+
+            int l = 0;
+            for (int i = 0; i < kmeri.Length - 1; i++)
+            {
+                for (int j = i + 1; j < kmeri.Length; j++)
+                {
+                    if (kmeri[i].Equals(kmeri[j]))
+                    {
+                        cnts[l] += 1;
+                    }
+                }
+                l++;
+            }
+
+            for (int i = 0; i < cnts.Length; i++)
+            {
+                Console.WriteLine("-->cnt ..> {0}", cnts[i]);
+            }
+
+
+            for(int i=0;i<cnts.Length;i++)
+            {
+                if(cnts[i]==t)
+                {
+                    klamz.Add(kmeri[i]);
+                }
+            }
+            return klamz;
+        }
+
+        static void Main(string[] args)
+        {
+            string genom = "CTGCAATGCATGACAAGCCTGCAGTTGCAACCGTAGCATGACGCCCCCCTGAT";
+            Console.WriteLine("genom : {0}", genom);
+            int k = 4;
+            int L = 25;
+            int t = 3;
+
+            List<string> klamz = new List<string>();
+            klamz = clums(genom, k, L, t);
+
+            for(int i=0;i<klamz.Count;i++)
+            {
+                Console.WriteLine("REZZZZZ ::: {0}", klamz[i]);
+            }
+
+     
+        }
+    }
+}
