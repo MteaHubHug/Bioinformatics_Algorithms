@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+namespace z2
+{
+    class Program
+    {
+        static string[] kejmers(string text,int k)
+        {
+            string[] kmeri = new string[text.Length-k+1];
+            int l = 0;
+            for(int i=0;i<text.Length-k+1;i++)
+            {
+                string komad = "";
+                int z = i;
+                for(int j=0;j<k;j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+
+
+            return kmeri;
+
+        }
+        
+
+        static void Main(string[] args)
+        {
+            string text= "ACTGACTCCCACCCCACT";
+            int k = 3;
+            string[] kmeri = new string[text.Length-k+1];
+            
+            kmeri = kejmers(text, k);
+            for(int i=0;i<text.Length-k+1;i++)
+            {
+                Console.WriteLine("kmer : {0}", kmeri[i]);
+            }
+
+            int[] cnts = new int[text.Length - k + 1];
+            for (int i = 0; i < cnts.Length; i++) cnts[i] = 1;
+            int l = 0;
+            for (int i=0;i<kmeri.Length-1;i++)
+            {
+                for(int j=i+1;j<kmeri.Length;j++)
+                {
+                    if(kmeri[i].Equals(kmeri[j]))
+                    {
+                        cnts[l] += 1;
+                    }
+                }
+                l++;
+            }
+
+            for (int i = 0; i < cnts.Length; i++)
+            {
+                Console.WriteLine("-->cnt ..> {0}", cnts[i]);
+            }
+
+            int max =cnts[0];
+     
+            for(int i=0;i<cnts.Length;i++)
+            {
+                if(max<cnts[i])
+                {
+                    max = cnts[i];
+                }
+            }
+            List<string> rez = new List<string>();
+            for (int i = 0; i < kmeri.Length; i++)
+            {
+                if(max==cnts[i])
+                {
+                    Console.WriteLine("---> REZ : {0}", kmeri[i]);
+                    rez.Add(kmeri[i]);
+                }
+            }
+
+
+
+        }
+    }
+}
