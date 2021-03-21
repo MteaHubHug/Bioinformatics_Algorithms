@@ -1,0 +1,40 @@
+using System;
+
+namespace z3
+{
+    class Program
+    {
+
+
+        static string okreni(string text)
+        {
+            string novi = "";
+            for (int i = text.Length-1; i >=0; i--)
+            {
+                novi += text[i];
+            }
+            return novi;
+        }
+
+        static string kompl(string text)
+        {
+            string novi = "";
+            for(int i=0;i<text.Length;i++)
+            {
+                if (text[i] == 'A') novi += 'T';
+                else if (text[i] == 'T') novi += 'A';
+                else if (text[i] == 'G') novi += 'C';
+                else if (text[i] == 'C') novi += 'G';
+            }
+            return novi;
+        }
+
+        static void Main(string[] args)
+        {
+            string text = "AGTCGCATAGT";
+            string novi = okreni(text);
+            string kmpl = kompl(novi);
+            Console.WriteLine("devetmer : {0} \n međurez : {1} \n kompl : {2}", text, novi, kmpl) ;
+        }
+    }
+}
