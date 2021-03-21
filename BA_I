@@ -1,0 +1,168 @@
+using System;
+using System.Collections.Generic;
+namespace zadI
+{
+    class Program
+    {
+
+        static int Hamming(string prvi, string drugi)
+        {
+            int udaljenost = 0;
+            if (prvi.Length != drugi.Length) return 100; //greska
+
+            for (int i = 0; i < prvi.Length; i++)
+            {
+                if (prvi[i] != drugi[i]) udaljenost++;
+            }
+            return udaljenost;
+        }
+
+        static string[] kejmers(string text, int k)
+        {
+            string[] kmeri = new string[text.Length - k + 1];
+            int l = 0;
+            for (int i = 0; i < text.Length - k + 1; i++)
+            {
+                string komad = "";
+                int z = i;
+                for (int j = 0; j < k; j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+
+
+            return kmeri;
+
+        }
+
+        static List<int> positions(string text, string pattern, int d)
+        {
+            List<int> pozicije = new List<int>();
+            int k = pattern.Length;
+            int len = text.Length - k + 1;
+            string[] kejmeri = new string[len];
+            kejmeri = kejmers(text, pattern.Length);
+            for (int i = 0; i < kejmeri.Length; i++)
+            {
+                Console.WriteLine("KEJMER : {0}", kejmeri[i]);
+            }
+
+
+
+            for (int i = 0; i < kejmeri.Length - 1; i++)
+            {
+
+                if (Hamming(kejmeri[i], pattern) <= d)
+                {
+                    pozicije.Add(i);
+                }
+
+            }
+
+
+            return pozicije;
+        }
+
+        static string k_mer (string text,int poz,int k)
+        {
+            string kmer = "";
+            for(int i=0;i<k;i++)
+            {
+                kmer += text[poz];
+                poz++;
+            }
+
+            return kmer;
+        }
+
+
+        static List<string> freq_kejmers(string text,int k,int d)
+        {
+            List<string> freq = new List<string>();
+            string[] kejmeri = new string[text.Length - k + 1];
+            kejmeri = kejmers(text, k);
+            int[][] mca = new int[kejmeri.Length][];
+            List<int> pozicije = new List<int>();
+            int max = -1;
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                pozicije = positions(text, kejmeri[i], d);
+                mca[i] = new int[pozicije.Count];
+                for(int j=0;j<pozicije.Count;j++)
+                {
+                    mca[i][j] = pozicije[j];
+                }
+                if (max < pozicije.Count) max = pozicije.Count;
+            }
+            string kmer = "";
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+
+                if(mca[i].Length==max )
+                {
+                    for(int j=0;j<mca[i].Length;j++)
+                    {
+                        kmer = k_mer(text, mca[i][j],k);
+                        freq.Add(kmer);
+                    }
+                }
+            }
+
+
+            return freq;
+        }
+
+
+        static List<string> reduciraj(List<string> freq)
+        {
+            List<string> reduci = new List<string>();
+
+            for(int i=0;i<freq.Count;i++)
+            {
+                if(reduci.Contains(freq[i])==false)
+                {
+                    reduci.Add(freq[i]);
+                } 
+            }
+
+            return reduci;
+        }
+
+
+        static void Main(string[] args)
+        {
+            /*
+            string text = "atcaATGATCAACgtaagcttctaagcATGATCAAGgtgctcacacagtttatccacaacctgagtggatgacatcaagataggtcgttgtatctccttcctctcgtactctcatgacca"
+              + "cggaaagATGATCAAGagaggatgatttcttggccatatcgcaatgaatacttgtgacttgtgcttccaattgacatcttcagcgccatattgcgctggccaaggtgacggagcgggatt"
+              + "acgaaagCATGATCATggctgttgttctgtttatcttgttttgactgagacttgttaggatagacggtttttcatcactgactagccaaagccttactctgcctgacatcgaccgtaaat"
+              + "tgataatgaatttacatgcttccgcgacgatttacctCTTGATCATcgatccgattgaagatcttcaattgttaattctcttgcctcgactcatagccatgatgagctCTTGATCATgtt"
+              + "tccttaaccctctattttttacggaagaATGATCAAGctgctgctCTTGATCATcgtttc";
+            */
+            // string text2 = text.ToUpper();
+            string text = "AACAAGCATAAACATTAAAGAG";
+            int d = 1;
+            int k = 5;
+
+            List<string> freq = freq_kejmers(text, k, d);
+            for(int i=0;i<freq.Count;i++)
+            {
+                Console.WriteLine("Česti {0}-mer : {1}", k, freq[i]);
+            }
+
+
+            /*jos moram urediti tako da mi se ne pojavljuju da ista frekventna k-mera */
+            Console.WriteLine("REDUCIRANA LISTA FREKVENTNIH ::::::::::::::::::::::::");
+            List<string> reduci = new List<string>();
+            reduci = reduciraj(freq);
+            foreach (string el in reduci)
+            {
+                Console.WriteLine("Česti {0}-mer : {1}", k, el);
+            }
+
+        }
+    }
+}
