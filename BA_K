@@ -1,0 +1,137 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+namespace zadK
+{
+    class Program
+    {
+
+        static string[] kejmers(string text, int k)
+        {
+            string[] kmeri = new string[text.Length - k + 1];
+            int l = 0;
+            for (int i = 0; i < text.Length - k + 1; i++)
+            {
+                string komad = "";
+                int z = i;
+                for (int j = 0; j < k; j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+            return kmeri;
+        }
+        /********************************** BITNO ****************/
+        static int PatternToNumer(string patt)
+        {
+            int ptn = 0;
+            int k = 0;
+            for (int i = 0; i < patt.Length; i++)
+            {
+                if (patt[i] == 'C')
+                {
+                    ptn = ptn + 1 * ((int)Math.Pow(4, k));
+                }
+                else if (patt[i] == 'G')
+                {
+                    ptn = ptn + 2 * ((int)Math.Pow(4, k));
+                }
+                else if (patt[i] == 'T')
+                {
+                    ptn = ptn + 3 * ((int)Math.Pow(4, k));
+                }
+                k++;
+            }
+            return ptn;
+        }
+        /*************************************************************/
+
+        static int[] ComputingFrequencies(string text,int k)
+        {
+            string[] kejmeri = new string[text.Length - k + 1];
+            kejmeri = kejmers(text, k);
+            int j;
+
+            int[] frekvencije = new int[(int)Math.Pow(4,k)];
+            for(int i=0;i<frekvencije.Length;i++)
+            {
+                frekvencije[i] = 0;
+            }
+            string pattern = "";
+
+            for(int i=0;i<text.Length-k+1;i++)
+            {
+                pattern = kejmeri[i];
+                j = PatternToNumer(pattern);
+                frekvencije[j]++;
+            }
+            return frekvencije;
+        }
+
+        /****************************************************/
+
+        static string NumberToPattern(int index,int k)
+        {
+            string pattern = "";
+          
+            char[] D = new char[4];
+            D[0] = 'A'; D[1] = 'C'; D[2] = 'G'; D[3] = 'T';
+            int q = index;
+            for(int i=0;i<k;i++)
+            {
+                int r = q % 4;
+                q /= 4;
+                pattern += D[r];
+            }
+            return pattern;
+        }
+        /******************************************************************/
+        static List<string> FasterFrequentWords(string text,int k)
+        {
+            List<string> FrequentPatterns = new List<string>();
+            int[] frekvencije = new int[(int)Math.Pow(4, k)];
+            frekvencije = ComputingFrequencies(text, k);
+            int maxCount = frekvencije[0];
+            for(int i=0;i<frekvencije.Length;i++)
+            {
+                if (maxCount < frekvencije[i]) maxCount = frekvencije[i];
+            }
+            string pattern = "";
+            for(int i=0;i<(int)Math.Pow(4,k);i++)
+            {
+                if(frekvencije[i]==maxCount)
+                {
+                    pattern = NumberToPattern(i, k);
+                    FrequentPatterns.Add(pattern);
+
+                }
+            }
+
+            return FrequentPatterns;
+        }
+
+
+        static void Main(string[] args)
+        {
+
+            string text = "AAGCAAAGGTGGG";
+            int k = 2;
+
+            int len = (int)Math.Pow(4, k);
+            int[] frekvenicije = new int[len];
+            frekvenicije = ComputingFrequencies(text, k);
+            foreach(int f in frekvenicije)
+            {
+                Console.WriteLine("--> {0}", f);
+            }
+
+
+
+
+
+        }
+    }
+}
