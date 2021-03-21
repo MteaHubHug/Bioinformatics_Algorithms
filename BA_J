@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+namespace zadJ
+{
+    class Program
+    {
+
+        static int Hamming(string prvi, string drugi)
+        {
+            int udaljenost = 0;
+            if (prvi.Length != drugi.Length) return 100; //greska
+
+            for (int i = 0; i < prvi.Length; i++)
+            {
+                if (prvi[i] != drugi[i]) udaljenost++;
+            }
+            return udaljenost;
+        }
+
+        static string[] kejmers(string text, int k)
+        {
+            string[] kmeri = new string[text.Length - k + 1];
+            int l = 0;
+            for (int i = 0; i < text.Length - k + 1; i++)
+            {
+                string komad = "";
+                int z = i;
+                for (int j = 0; j < k; j++)
+                {
+                    komad += text[z];
+                    z++;
+                }
+                kmeri[l] = komad;
+                l++;
+            }
+            return kmeri;
+
+        }
+
+        static string okreni(string text)
+        {
+            string novi = "";
+            for (int i = text.Length - 1; i >= 0; i--)
+            {
+                novi += text[i];
+            }
+            return novi;
+        }
+
+        static string kompl(string text)
+        {
+            string novi = "";
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == 'A') novi += 'T';
+                else if (text[i] == 'T') novi += 'A';
+                else if (text[i] == 'G') novi += 'C';
+                else if (text[i] == 'C') novi += 'G';
+            }
+            return novi;
+        }
+
+
+        static int countd(string text, string pattern,int d)
+        {
+            int cnt = 0;
+            int k = pattern.Length;
+            string[] kejmeri = new string[text.Length -k + 1];
+            kejmeri = kejmers(text, k);
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                if(Hamming(pattern,kejmeri[i])<=d)
+                {
+                    cnt++;
+                }
+            }
+            return cnt;
+        }
+
+
+
+        static List<string> maxsum(string DNA,int k,int d)
+        {
+            List<string> maxkjmrs = new List<string>();
+
+
+
+            return maxkjmrs;
+        }
+
+
+        static void Main(string[] args)
+        {
+            string text = "AACAAGCATAAACATTAAAGAG";
+            int d = 1;
+            int k = 5;
+            string[] kejmeri = new string[text.Length - k + 1];
+            kejmeri = kejmers(text, k);
+            string[] kejmeri_rev = new string[text.Length - k + 1];
+            
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                kejmeri_rev[i] = kompl(kejmeri[i]);
+            }
+
+            int[] cnts = new int[text.Length-k+1];
+            int[] cnts_rev = new int[text.Length-k+1];
+
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                cnts[i] = countd(text, kejmeri[i], d);
+                cnts_rev[i] = countd(text, kejmeri_rev[i], d);
+            }
+
+            int[] sums = new int[text.Length - k + 1];
+
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                sums[i] = cnts[i] + cnts_rev[i];
+            }
+            int max = -1;
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                if (max < sums[i]) max = sums[i];
+            }
+            List<string> rez = new List<string>();
+            for(int i=0;i<kejmeri.Length;i++)
+            {
+                if(sums[i]==max)
+                {
+                    rez.Add(kejmeri[i]);
+                }
+            }
+
+            foreach(string el in rez)
+            {
+                Console.WriteLine("REZ : {0}", el);
+            }
+
+        }
+    }
+}
