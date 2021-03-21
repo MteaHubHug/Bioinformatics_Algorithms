@@ -1,0 +1,36 @@
+using System;
+
+namespace zadM
+{
+    class Program
+    {
+        /**************NOTE TO SELF : za ovaj zadatak pogledaj figuru 1.21 na 43. str u skripti! *************/
+        static string NumberToSymbol(int ostatak)
+        {
+            if (ostatak == 3) return "T";
+            else if (ostatak == 2) return "G";
+            else if (ostatak == 1) return "C";
+            else return "A"; //(==0)
+        }
+
+        static string NumberToPattern(int index,int k)
+        {
+            if (k == 1) return NumberToSymbol(index);
+            int prefixIndex = index / 4;
+            int r = index % 4;
+            string symbol = NumberToSymbol(r);
+            string PrefixPattern = NumberToPattern(prefixIndex, k - 1);
+            return string.Concat(PrefixPattern, symbol);
+
+        }
+
+        static void Main(string[] args)
+        {
+            int index = 9904;
+            int k = 7;
+            string pattern = NumberToPattern(index, k);
+            Console.WriteLine("PATTERN : {0}",pattern);
+
+        }
+    }
+}
